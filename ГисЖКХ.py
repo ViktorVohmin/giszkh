@@ -11,8 +11,6 @@ import pathlib
 from openpyxl.styles import Color, PatternFill, Font, Border
 import time
 from datetime import datetime
-import logging
-import fdb
 import os
 from inspect import getsourcefile
 from os.path import abspath
@@ -58,7 +56,7 @@ def send(driver, pfile, rfile, application_path):
             repsheet = report.worksheets[0]
             repmax_row = repsheet.max_row
             for row_num in range(1, repmax_row):
-                if (str(repsheet.cell(row = row_num+1, column =20).value)=='None') and (str(sheet.cell(row = row_num+1, column =1).value)==str(repsheet.cell(row = row_num+1, column =1).value)):
+                if (str(repsheet.cell(row = row_num+1, column =20).value)=='None') and (str(sheet.cell(row = row_num+1, column = 2).value)==str(repsheet.cell(row = row_num+1, column =1).value)):
                     min_row = repsheet.cell(row = row_num+1, column =20).row
                     break      
         for rrow_num in range(1, rmax_row): 
@@ -69,13 +67,13 @@ def send(driver, pfile, rfile, application_path):
             for row_num in range(star, max_row):
                 if str(rsheet.cell(row = rrow_num+1, column = 1).value)!='None':
                     adr1=str(rsheet.cell(row = rrow_num+1, column = 1).value)+'|'+str(rsheet.cell(row = rrow_num+1, column = 2).value)+'|'+str(rsheet.cell(row = rrow_num+1, column = 3).value)
-                if str(sheet.cell(row = row_num+1, column = 1).value)!='None':
-                    adr2=str(sheet.cell(row = row_num+1, column = 8).value)+'|'+str(sheet.cell(row = row_num+1, column = 9).value)+'|'+str(sheet.cell(row = row_num+1, column = 10).value)
+                if str(sheet.cell(row = row_num+1, column = 2).value)!='None':
+                    adr2=str(sheet.cell(row = row_num+1, column = 9).value)+'|'+str(sheet.cell(row = row_num+1, column = 10).value)+'|'+str(sheet.cell(row = row_num+1, column = 11).value)
                 if adr1==adr2:
                     time.sleep(5)
                     driver.find_element_by_css_selector("body > div.page-wrapper > div.app-content-wrapper > div > div > div:nth-child(1) > div > debtreq-received-requests-search > ng-form > div > ef-bp-form > div > form > div.collapse-toggle__cnt.collapse.in > div > div > div > div > div:nth-child(1) > div.col-xs-7 > div:nth-child(1) > div > div > input").send_keys(Keys.CONTROL, 'a')
                     driver.find_element_by_css_selector("body > div.page-wrapper > div.app-content-wrapper > div > div > div:nth-child(1) > div > debtreq-received-requests-search > ng-form > div > ef-bp-form > div > form > div.collapse-toggle__cnt.collapse.in > div > div > div > div > div:nth-child(1) > div.col-xs-7 > div:nth-child(1) > div > div > input").send_keys(Keys.BACKSPACE)
-                    driver.find_element_by_css_selector("body > div.page-wrapper > div.app-content-wrapper > div > div > div:nth-child(1) > div > debtreq-received-requests-search > ng-form > div > ef-bp-form > div > form > div.collapse-toggle__cnt.collapse.in > div > div > div > div > div:nth-child(1) > div.col-xs-7 > div:nth-child(1) > div > div > input").send_keys(str(sheet.cell(row = row_num+1, column = 1).value))
+                    driver.find_element_by_css_selector("body > div.page-wrapper > div.app-content-wrapper > div > div > div:nth-child(1) > div > debtreq-received-requests-search > ng-form > div > ef-bp-form > div > form > div.collapse-toggle__cnt.collapse.in > div > div > div > div > div:nth-child(1) > div.col-xs-7 > div:nth-child(1) > div > div > input").send_keys(str(sheet.cell(row = row_num+1, column = 2).value))
                     driver.find_element_by_css_selector("body > div.page-wrapper > div.app-content-wrapper > div > div > div:nth-child(1) > div > debtreq-received-requests-search > ng-form > div > ef-bp-form > div > form > div.collapse-toggle__pane.collapse-toggle__pane_utility.fix-ef-bp > div > div.col-xs-8.text-right.ng-scope > button").click()
                     time.sleep(10)
                     search=[]
@@ -198,7 +196,7 @@ def account(PName,PPassword,POGRN,PFILE,RFILE):
     time.sleep(10)
     driver.find_element_by_css_selector("#login").send_keys(PName)
     driver.find_element_by_css_selector("#password").send_keys(PPassword)
-    bclick(driver, "#loginByPwdButton")
+    bclick(driver, "body > esia-root > div > esia-login > div > div.form-container > form > div.mb-24 > button")
     time.sleep(10)
     findstr(driver, POGRN)
     #bclick(driver, "#app > form > div > button")
